@@ -59,12 +59,12 @@ var chartData = {};
 
 // 记录当前页面的表单选项
 var pageState = {
-  nowSelectCity: "北京",
+  nowSelectCity:"北京",
   nowGraTime: "day"
 }
 var formGraTime=document.getElementById("form-gra-time");
 var citySelect=document.getElementById("city-select");
-var aqiChartWrap=document.getElementById("aqi-chart-wrap");
+var aqiChartWrap=document.getElementsByClassName('aqi-chart-wrap')[0];
 /**
  * 渲染图表
  */
@@ -85,6 +85,7 @@ function graTimeChange() {
   // 确定是否选项发生了变化 
   // return 这里是精髓防止重复点击触发事件。
 if(pageState.nowGraTime==this.value){
+  alert("hello world")
   return;
 }
   else{
@@ -102,6 +103,7 @@ initAqiChartData();
 function citySelectChange() {
   // 确定是否选项发生了变化 
 if(pageState.nowSelectCity==this.value){
+  alert("hello world")
   return;
 }
   else{
@@ -117,19 +119,20 @@ renderChart();
  * 初始化日、周、月的radio事件，当点击时，调用函数graTimeChange
  */
 function initGraTimeForm() {
- // var pageRadio = formGraTime.getElementsByTagName('input');
-  // for (var i = 0; i < pageRadio.length; i++) {
-  //   addEventHandler(pageRadio[i],'click',graTimeChange);
-  // }
-  addEventHandler(formGraTime,"click",function(event){
-    graTimeChange.call(event.target)
-  })
+ var pageRadio = formGraTime.getElementsByTagName('input');
+  for (var i = 0; i < pageRadio.length; i++) {
+    addEventHandler(pageRadio[i],'click',graTimeChange);
+  }
+  // addEventHandler(formGraTime,"click",function(event){
+  //   graTimeChange.call(event.target)
+  // })
   //兼容了浏览器还实现了事件委托/事件绑定。
   // formGraTime.addEventListener("click",function(event){
-  //   graTimeChange.call(event.target)
+  //   graTimeChange.call(event.target)})
     //  call的应用很神奇。
-    //addEventHandler(event.target,"click",graTimeChange) 这里有问题
-  // })
+    //addEventHandler(event.target,"click",graTimeChange) })
+    //这里有问题
+
 
 }
 
@@ -144,7 +147,8 @@ for(var i in aqiSourceData){
 }
   citySelect.innerHTML=cityList;
   // 给select设置事件，当选项发生变化时调用函数citySelectChange
-addEventHandler(citySelect,"change",citySelectChange);
+
+addEventHandler(citySelect,'change',citySelectChange);
 }
 
 /**
@@ -166,13 +170,13 @@ function initAqiChartData() {
       countDay++;
       if(new Date(item).getDay()==6){
         week++;
-        chartData['第'+week+'周'] = Math.floor(countSum/daySum);;
+        chartData['第'+week+'周'] = Math.floor(countSum/countDay);
         countSum = 0;
-        daySum = 0;
+        countDay = 0;
       }
       if(countDay!==0){
       week ++;
-      chartData['第'+week+'周'] = Math.floor(countSum/daySum);
+      chartData['第'+week+'周'] = Math.floor(countSum/countDay);
       }
       //  循环先全部循环第一个if 循环完所有数据之后进行第二个if判断。
       //  保证最后一周不满一周也会计算其平均值。
@@ -180,20 +184,20 @@ function initAqiChartData() {
   }
    if (pageState.nowGraTime == 'month') {
     chartData = {};
-    var countSum=0, daySum=0, month=0;
+    var countSum=0, countDay=0, month=0;
     for (var item in nowCityData) {
       countSum += nowCityData[item];
-      daySum ++;
+      countDay ++;
       if ((new Date(item)).getMonth() !== month) {
         month ++;
-        chartData['第'+month+'月'] = Math.floor(countSum/daySum);
+        chartData['第'+month+'月'] = Math.floor(countSum/countDay);
         countSum = 0
-        daySum = 0;
+        countDay = 0;
       }
     }
-    if (daySum !== 0) {
+    if  (countDay !== 0) {
       month ++;
-      chartData['第'+month+'月'] = Math.floor(countSum/daySum);
+      chartData['第'+month+'月'] = Math.floor(countSum/countDay);
     }//逻辑同周，不知道对不对
   }
   
@@ -206,6 +210,7 @@ function init() {
   initGraTimeForm()
   initCitySelector();
   initAqiChartData();
+  renderChart();
 }
 
 init();
