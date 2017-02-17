@@ -35,11 +35,11 @@ window.onload = function() {
     },
     //输入为空时
     isEmpty: function() {
-      return (this.str.length == 0)
+      return (this.str.length === 0)
     },
     //左侧弹出
     leftpop: function() {
-      if (!isEmpty()) {
+      if (!this.isEmpty()) {
         alert(this.str.shift());
         this.paint();
       } else {
@@ -48,11 +48,11 @@ window.onload = function() {
     },
     // 右侧弹出
     rightpop: function() {
-      if (!isEmpty()) {
+      if (!this.isEmpty()) {
         alert(this.str.pop());
         this.paint();
       } else {
-        alert("The queue is already empty!")
+        alert("The queu is already empty!")
       }
 
     },
