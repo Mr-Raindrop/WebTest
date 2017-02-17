@@ -12,7 +12,7 @@ function addEventHandler(ele, event, handler) {
 
 function each(arr, fn) {
   for (var cur = 0; cur < arr.length; cur++) {
-    fn(arr[cur], cur);
+    fn(arr[cur]);
   }
 }
 
@@ -52,14 +52,16 @@ window.onload = function() {
         alert(this.str.pop());
         this.paint();
       } else {
-        alert("The queu is already empty!")
+        alert("The queue is already empty!")
       }
 
     },
+    //  可以优化一下，每次都是注入所有的元素而不是注入新添加的。
     paint: function() {
       var txt = "";
       each(this.str, function(item) {
         txt += ("<div>" + parseInt(item) + "</div>")
+
 
       })
       container.innerHTML = txt;
