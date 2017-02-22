@@ -71,7 +71,7 @@ window.onload = function() {
 
     deleteId: function(id) {
       console.log(id);
-      this.str.splic(id, 1);
+      this.str.splice(id,1);
       this.paint();
     }
   }
